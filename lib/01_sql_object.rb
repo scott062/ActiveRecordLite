@@ -1,5 +1,6 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
+require 'byebug'
 # NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
 # of this project. It was only a warm up.
 
@@ -37,15 +38,31 @@ class SQLObject
   end
 
   def self.all
-    # ...
+    table_name = self.table_name
+    records = DBConnection.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        #{table_name}
+    SQL
+    self.parse_all(records)
   end
 
   def self.parse_all(results)
-    # ...
+    results.map { |record| self.new(record) }
   end
 
   def self.find(id)
-    # ...
+    id = id
+    record = DBConnection.execute(<<-SQL, id)
+      SELECT
+        *
+      FROM
+        #{table_name}
+      WHERE
+        #{table_name}.id = ?
+    SQL
+    self.parse_all(record).first
   end
 
   def initialize(params = {})
@@ -64,11 +81,20 @@ class SQLObject
   end
 
   def attribute_values
-    # ...
+    self.class.columns.map { |attr_name| self.send(attr_name) }
   end
 
   def insert
-    # ...
+    table_name = self.class.table_name
+    cols = self.columns.join(", ")
+    p cols
+    debugger
+    DBConnection.execute(<<-SQL, cols, vals)
+      INSERT INTO
+        table_name(cols)
+      VALUES
+
+    SQL
   end
 
   def update
