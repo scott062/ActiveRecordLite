@@ -85,16 +85,16 @@ class SQLObject
   end
 
   def insert
-    table_name = self.class.table_name
-    cols = self.columns.join(", ")
-    p cols
-    debugger
-    DBConnection.execute(<<-SQL, cols, vals)
-      INSERT INTO
-        table_name(cols)
-      VALUES
+    cols = self.class.columns.join(", ")
+    question_marks = (["?"] * (self.class.columns.length)).join(", ")
 
+    DBConnection.execute(<<-SQL, *attribute_values)
+      INSERT INTO
+        #{self.class.table_name} (#{cols})
+      VALUES
+        (#{question_marks})
     SQL
+    self.id = DBConnection.last_insert_row_id
   end
 
   def update
