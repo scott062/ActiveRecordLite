@@ -98,18 +98,23 @@ class SQLObject
   end
 
   def update
-    questions_marks = self.class.columns.map { |attr_name| "#{attr_name} = ?"}
-    p question_marks
-    DBConnection.execute(<<-SQL, *attribute_values)
+    question_marks = self.class.columns.map { |attr_name| "#{attr_name} = ?"}.join(", ")
+
+    DBConnection.execute(<<-SQL, *attribute_values, id)
       UPDATE
         #{self.class.table_name}
       SET
-        #{}
+        #{question_marks}
       WHERE
+        #{self.class.table_name}.id = ?
     SQL
   end
 
   def save
-    # ...
+    if self.id.nil?
+      self.insert
+    else
+      self.update
+    end 
   end
 end
