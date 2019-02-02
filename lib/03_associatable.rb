@@ -14,7 +14,7 @@ class AssocOptions
   end
 
   def table_name
-
+    self.class_name.concat("s").downcase
   end
 end
 
