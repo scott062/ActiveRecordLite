@@ -9,11 +9,11 @@ class AssocOptions
   )
 
   def model_class
-    self.class_name.constantize
+    @class_name.constantize
   end
 
   def table_name
-    self.class_name.concat("s").downcase
+    model_class.table_name
   end
 end
 
@@ -57,9 +57,10 @@ module Associatable
   end
 
   def has_many(name, options = {})
-    options = HasManyOptions.new(name, self.name, options)
+    self.assoc_options[name] = HasManyOptions.new(name, self.name, options)
 
     define_method(name) do
+      options = self.class.assoc_options[name]
       key_val = self.send(options.primary_key)
       options.model_class.where(options.foreign_key => key_val)
     end

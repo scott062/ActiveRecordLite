@@ -41,7 +41,7 @@ class SQLObject
     table_name = self.table_name
     records = DBConnection.execute(<<-SQL)
       SELECT
-        *
+        #{table_name}.*
       FROM
         #{table_name}
     SQL
@@ -78,6 +78,7 @@ class SQLObject
 
   def attributes
     @attributes ||= {}
+
   end
 
   def attribute_values
@@ -115,6 +116,6 @@ class SQLObject
       self.insert
     else
       self.update
-    end 
+    end
   end
 end
