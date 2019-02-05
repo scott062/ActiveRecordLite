@@ -1,2 +1,1 @@
-# H1
-Active Record Lite
+# H1 Active Record Lite
