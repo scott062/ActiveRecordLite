@@ -7,7 +7,7 @@ module Searchable
     args = params.values
     results = DBConnection.execute(<<-SQL, *args)
       SELECT
-        *
+        #{table_name}.*
       FROM
         #{table_name}
       WHERE
