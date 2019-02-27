@@ -1,4 +1,4 @@
-# Active Record Lite
+# Lazy Record
 ## About
 Active Record is the 'model' portion of the Ruby on Rails MVC framework. Specifically, it is an Object Relational Mapping (ORM) framework that allows programmers to write leaner code when working with the database. This is an implementation of that Active Record ORM using Ruby to implement an `SQLObject` class that interfaces with the database. This `SQLObject` class makes use of `::insert`, `::save`, and `::update` to perform their respective functions on records in the database while the methods themselves abstract away table-specific details. Lastly, this Active Record Lite implements associations using metaprogramming to build an Associatable module.
 
